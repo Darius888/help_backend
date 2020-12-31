@@ -16,22 +16,16 @@ public class AverageScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "average_score_id")
-    private Long averageScoreID;
+    private Integer averageScoreID;
     @Column(name = "user_type")
     private String userType;
     @Column(name = "user_score")
     private String userScore;
-    @Column(name = "average_score_help_seeker_id")
-    private Integer averageScoreHelpSeekerID;
-    @Column(name = "average_score_helper_id")
-    private Integer averageScoreHelperID;
+    @Column(name = "average_score_helpo_user_id")
+    private Integer averageScoreHelpoUserID;
 
     @ManyToOne
-    @JoinColumn(name = "help_seeker_id", referencedColumnName = "help_seeker_id", insertable = false, nullable = false)
-    private HelpSeeker helpSeekerAverageScore;
-
-    @ManyToOne
-    @JoinColumn(name = "helper_id", referencedColumnName = "helper_id", insertable = false, nullable = false)
-    private Helper helperAverageScore;
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
+    private HelpoUser helpoUserAverageScore;
 
 }

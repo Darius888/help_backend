@@ -65,18 +65,13 @@ public class JwtTokenUtil implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 5000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUserEmailFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String userEmail) {
+        return (getUserEmailFromToken(token).equals(userEmail) && !isTokenExpired(token));
     }
 
-    public Boolean validateToken2(String userEmail,String token) {
-        final String username = getUserEmailFromToken(token);
-        return (username.equals(userEmail) && !isTokenExpired(token));
-    }
 }

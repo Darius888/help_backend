@@ -13,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "help_seeker", schema = "public")
-public class HelpSeeker implements Serializable {
+@Table(name = "helpo_user", schema = "public")
+public class HelpoUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "help_seeker_id")
-    private Long helpSeekerId;
+    @Column(name = "helpo_user_id")
+    private Integer helpoUserID;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -31,16 +31,16 @@ public class HelpSeeker implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "helpSeeker")
-    private List<Job> jobList;
+    @OneToMany(mappedBy = "helpoUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HelpoJob> helpoJobList;
 
 //    @OneToOne(mappedBy = "helpSeekerProfilePhoto", cascade =  CascadeType.ALL)
 //    private ProfilePhoto profilePhoto;
 
-    @OneToMany(mappedBy = "helpSeekerUserReview")
+    @OneToMany(mappedBy = "helpoUserReview")
     private List<UserReview> userReviewList;
 
-    @OneToMany(mappedBy = "helpSeekerAverageScore")
+    @OneToMany(mappedBy = "helpoUserAverageScore")
     private List<AverageScore> averageScoreList;
 
 

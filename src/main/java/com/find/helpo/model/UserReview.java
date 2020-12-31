@@ -17,24 +17,17 @@ public class UserReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_review_id")
-    private Long userReviewID;
+    private Integer userReviewID;
     @Column(name = "user_review_type")
     private String userReviewType;
     @Column(name = "user_review")
     private String userReview;
-    @Column(name = "review_owner_help_seeker_id")
-    private Long reviewOwnerHelpSeekerID;
-    @Column(name = "review_owner_helper_id")
-    private Long reviewOwnerHelperID;
+    @Column(name = "review_owner_helpo_user_id")
+    private Integer reviewOwnerHelpoUserID;
 
     @ManyToOne
-    @JoinColumn(name = "help_seeker_id", referencedColumnName = "help_seeker_id", insertable = false, nullable = false)
-    private HelpSeeker helpSeekerUserReview;
-
-    @ManyToOne
-    @JoinColumn(name = "helper_id", referencedColumnName = "helper_id", insertable = false, nullable = false)
-    private Helper helperUserReview;
-
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
+    private HelpoUser helpoUserReview;
 
 
 }

@@ -1,6 +1,9 @@
 package com.find.helpo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,19 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "job", schema = "public")
-public class Job {
-
-    //TO-DO add foreign key's
+@Table(name = "helpo_job", schema = "public")
+public class HelpoJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id")
-    private Long jobID;
+    private Integer jobID;
     @Column(name = "job_title")
     private String jobTitle;
     @Column(name = "job_post_date")
-    private Date jobPostDate;
+    private String jobPostDate;
     @Column(name = "job_type")
     private String jobType;
     @Column(name = "job_description")
@@ -34,21 +35,15 @@ public class Job {
     @Column(name = "job_status")
     private String jobStatus;
     @Column(name = "job_owner_id")
-    private Long jobOwnerID;
-    @Column(name = "job_favored_by_helper_id")
-    private Long jobFavoredByHelperID;
+    private Integer jobOwnerID;
     @Column(name = "job_favored_status")
     private String jobFavoredStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "helper_id", referencedColumnName = "helper_id", insertable = false, nullable = false)
-    private Helper helper;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
+    private HelpoUser helpoUser;
 
-    @ManyToOne
-    @JoinColumn(name = "help_seeker_id", referencedColumnName = "help_seeker_id", insertable = false, nullable = false)
-    private HelpSeeker helpSeeker;
-
-    @OneToMany(mappedBy = "jobPhotos")
+    @OneToMany(mappedBy = "helpoJobPhotos")
     private List<JobPhoto> jobPhotoList;
 
 

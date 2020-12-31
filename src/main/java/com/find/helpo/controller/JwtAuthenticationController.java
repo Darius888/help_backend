@@ -2,8 +2,7 @@ package com.find.helpo.controller;
 
 import com.find.helpo.config.JwtTokenUtil;
 import com.find.helpo.model.*;
-import com.find.helpo.service.JwtHelpSeekerDetailsService;
-import com.find.helpo.service.JwtHelperDetailsService;
+import com.find.helpo.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin
 @RequestMapping(path = "/users")
 public class JwtAuthenticationController {
+
+
+    private final String HEADER = "Authorization";
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -26,21 +27,17 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private JwtHelperDetailsService helperDetailsService;
-
-    @Autowired
-    private JwtHelpSeekerDetailsService helpSeekerDetailsService;
+    private JwtUserDetailsService helpoUserDetailsService;
 
 
-    @RequestMapping(value = "/authenticate/helper", method = RequestMethod.POST) //TO-DO add login model
-    public ResponseEntity<UserLoginResponse> createAuthenticationTokenForHelper(@RequestBody HelperLogin helperAuthenticationRequest) throws Exception {
-
-        authenticate(helperAuthenticationRequest.getUserEmail(), helperAuthenticationRequest.getPassword());
-        final UserDetails userDetails = helperDetailsService.loadUserByUsername(helperAuthenticationRequest.getUserEmail());
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<UserLoginResponse> createAuthenticationTokenForHelpSeeker(@RequestBody HelpoUserLogin helpoUserAuthenticationRequest) throws Exception {
+        authenticate(helpoUserAuthenticationRequest.getUserEmail(), helpoUserAuthenticationRequest.getPassword());
+        final UserDetails userDetails = helpoUserDetailsService.loadUserByUsername(helpoUserAuthenticationRequest.getUserEmail());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         final UserLoginResponse userLoginResponse = new UserLoginResponse();
-        if (helperDetailsService.checkIfHelperExists(helperAuthenticationRequest.getUserEmail())) {
+        if (helpoUserDetailsService.checkIfHelpSeekerExists(helpoUserAuthenticationRequest.getUserEmail())) {
 
             userLoginResponse.setUserEmail("success");
             userLoginResponse.setResponse("Login successfull");
@@ -54,58 +51,22 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(userLoginResponse);
     }
 
-
-
-    @RequestMapping(value = "/authenticate/helpseeker", method = RequestMethod.POST) //TO-DO add login model
-    public ResponseEntity<UserLoginResponse> createAuthenticationTokenForHelpSeeker(@RequestBody HelpSeekerLogin helpSeekerAuthenticationRequest) throws Exception {
-
-        authenticate(helpSeekerAuthenticationRequest.getUserEmail(), helpSeekerAuthenticationRequest.getPassword());
-        final UserDetails userDetails = helperDetailsService.loadUserByUsername(helpSeekerAuthenticationRequest.getUserEmail());
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        final UserLoginResponse userLoginResponse = new UserLoginResponse();
-        if (helperDetailsService.checkIfHelperExists(helpSeekerAuthenticationRequest.getUserEmail())) {
-
-            userLoginResponse.setUserEmail("success");
-            userLoginResponse.setResponse("Login successfull");
-            userLoginResponse.setToken(token);
-        } else {
-            userLoginResponse.setUserEmail("failure");
-            userLoginResponse.setResponse("User does not exist");
-            userLoginResponse.setToken("sorry");
-        }
-
-        return ResponseEntity.ok(userLoginResponse);
-    }
-
-    @RequestMapping(value = "/register/helper", method = RequestMethod.POST)
-    public ResponseEntity<UserRegisterResponse> saveHelper(@RequestBody Helper helper) throws Exception {
-        String response = helperDetailsService.saveHelper(helper);
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<UserRegisterResponse> saveHelpSeeker(@RequestBody HelpoUser helpoUser) throws Exception {
+        String response = helpoUserDetailsService.saveHelpSeeker(helpoUser);
         UserRegisterResponse userRegisterResponse = new UserRegisterResponse();
         userRegisterResponse.setResponse(response);
-        userRegisterResponse.setUserEmail(helper.getEmail());
-        return ResponseEntity.ok(userRegisterResponse);
-    }
-
-    @RequestMapping(value = "/register/helpseeker", method = RequestMethod.POST)
-    public ResponseEntity<UserRegisterResponse> saveHelpSeeker(@RequestBody HelpSeeker helpSeeker) throws Exception {
-        String response = helpSeekerDetailsService.saveHelpSeeker(helpSeeker);
-        UserRegisterResponse userRegisterResponse = new UserRegisterResponse();
-        userRegisterResponse.setResponse(response);
-        userRegisterResponse.setUserEmail(helpSeeker.getEmail());
+        userRegisterResponse.setUserEmail(helpoUser.getEmail());
         return ResponseEntity.ok(userRegisterResponse);
     }
 
 
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
     public String validateToken(@RequestBody JwtValidationModel jwtValidationModel) throws Exception {
-        String response = "";
-        if (!(jwtTokenUtil.validateToken2(jwtValidationModel.getUserEmail(), jwtValidationModel.getToken()))) {
-            response = "INVALID";
-        } else {
-            response = "VALID";
-        }
-        return response;
+        if (!(jwtTokenUtil.validateToken(jwtValidationModel.getToken(),jwtValidationModel.getUserEmail())))
+            return "INVALID";
+            else return "VALID";
+
     }
 
     private void authenticate(String username, String password) throws Exception {
