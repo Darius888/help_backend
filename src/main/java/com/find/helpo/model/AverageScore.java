@@ -20,7 +20,7 @@ public class AverageScore {
     @Column(name = "user_type")
     private String userType;
     @Column(name = "user_score")
-    private String userScore;
+    private Float userScore;
     @Column(name = "average_score_helpo_user_id")
     private Integer averageScoreHelpoUserID;
 

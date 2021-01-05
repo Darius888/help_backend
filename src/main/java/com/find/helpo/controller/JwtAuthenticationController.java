@@ -2,6 +2,7 @@ package com.find.helpo.controller;
 
 import com.find.helpo.config.JwtTokenUtil;
 import com.find.helpo.model.*;
+import com.find.helpo.repository.HelpoUserRepository;
 import com.find.helpo.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,9 @@ public class JwtAuthenticationController {
 
     @Autowired
     private JwtUserDetailsService helpoUserDetailsService;
+
+    @Autowired
+    private HelpoUserRepository helpoUserRepository;
 
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -68,6 +72,7 @@ public class JwtAuthenticationController {
             else return "VALID";
 
     }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {

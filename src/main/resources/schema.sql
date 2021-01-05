@@ -35,7 +35,7 @@ average_score_helpo_user_id integer REFERENCES helpo_user(helpo_user_id)
 
 CREATE TABLE helpo_job
 (
-job_id SERIAL PRIMARY KEY NOT NULL,
+helpo_job_id SERIAL PRIMARY KEY NOT NULL,
 job_title varchar(100) NOT NULL,
 job_post_date varchar(100)  NOT NULL,
 job_type varchar(100) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE job_photo
 job_photo_id SERIAL PRIMARY KEY NOT NULL,
 absolute_path varchar(100) NOT NULL,
 image_name varchar(100) NOT NULL,
-related_job_id integer REFERENCES helpo_job(job_id)
+related_job_id integer REFERENCES helpo_job(helpo_job_id)
 );
 
 

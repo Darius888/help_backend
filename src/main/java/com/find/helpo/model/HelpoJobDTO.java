@@ -15,7 +15,7 @@ import java.util.Date;
 @EqualsAndHashCode
 public class HelpoJobDTO {
 
-    private Integer jobID;
+    private Integer helpoJobID;
     private String jobTitle;
     private String jobPostDate;
     private String jobType;
@@ -25,8 +25,16 @@ public class HelpoJobDTO {
     private Integer jobOwnerID;
     private String jobFavoredStatus;
 
+
     public void setJobOwnerID(HelpoUser helpoUser) {
         this.jobOwnerID = helpoUser.getHelpoUserID();
     }
+    public Integer getJobOwnerID(HelpoUser helpoUser) {
+        return helpoUser.getHelpoUserID();
+    }
+
+
+
+
 
 }

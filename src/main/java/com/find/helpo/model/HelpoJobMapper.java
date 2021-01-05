@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobMapper {
+public class HelpoJobMapper {
 
     private ModelMapper modelMapper;
 

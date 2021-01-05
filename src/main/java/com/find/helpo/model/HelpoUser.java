@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,18 +32,17 @@ public class HelpoUser implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "helpoUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HelpoJob> helpoJobList;
+    @OneToMany(mappedBy = "helpoUser", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<HelpoJob> helpoJobList = new ArrayList<>();
 
 //    @OneToOne(mappedBy = "helpSeekerProfilePhoto", cascade =  CascadeType.ALL)
 //    private ProfilePhoto profilePhoto;
 
-    @OneToMany(mappedBy = "helpoUserReview")
+    @OneToMany(mappedBy = "helpoUserReview", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserReview> userReviewList;
 
-    @OneToMany(mappedBy = "helpoUserAverageScore")
+    @OneToMany(mappedBy = "helpoUserAverageScore", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AverageScore> averageScoreList;
-
 
 
 

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "job_photo", schema = "public")
-public class JobPhoto {
+public class HelpoJobPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class JobPhoto {
     private Integer relatedJobID;
 
     @ManyToOne
-    @JoinColumn(name = "job_id", referencedColumnName = "job_id", insertable = false, nullable = false)
+    @JoinColumn(name = "helpo_job_id", referencedColumnName = "helpo_job_id", insertable = false, nullable = false)
     private HelpoJob helpoJobPhotos;
 
 }

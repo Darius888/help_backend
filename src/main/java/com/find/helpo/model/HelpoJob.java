@@ -1,12 +1,8 @@
 package com.find.helpo.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -20,8 +16,8 @@ public class HelpoJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "job_id")
-    private Integer jobID;
+    @Column(name = "helpo_job_id")
+    private Integer helpoJobID;
     @Column(name = "job_title")
     private String jobTitle;
     @Column(name = "job_post_date")
@@ -39,12 +35,13 @@ public class HelpoJob {
     @Column(name = "job_favored_status")
     private String jobFavoredStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false)
     private HelpoUser helpoUser;
 
-    @OneToMany(mappedBy = "helpoJobPhotos")
-    private List<JobPhoto> jobPhotoList;
+    @OneToMany(mappedBy = "helpoJobPhotos", cascade = CascadeType.ALL)
+    private List<HelpoJobPhoto> helpoJobPhotoList;
+
 
 
 

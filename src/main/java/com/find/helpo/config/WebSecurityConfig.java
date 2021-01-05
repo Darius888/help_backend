@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable().formLogin().loginPage("/users/authenticate/helpseeker").and().
                 authorizeRequests()
-                .antMatchers("/job/create").authenticated().and().
+                .antMatchers("/job/**").authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
