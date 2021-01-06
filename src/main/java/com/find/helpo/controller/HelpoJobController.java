@@ -5,16 +5,19 @@ import com.find.helpo.model.HelpoJobDTO;
 import com.find.helpo.service.HelpoJobService;
 import com.find.helpo.service.ProfilePhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/job")
 public class HelpoJobController {
+
 
     @Autowired
     private HelpoJobService helpoJobService;
@@ -66,28 +69,27 @@ public class HelpoJobController {
         return helpoJobService.deleteHelpoJob(helpoJobDTO);
     }
 
-    @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
-        fileService.uploadFile(file);
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String singleFileUpload(@RequestParam("file") MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+            return fileService.uploadFile(file,redirectAttributes);
 
-        return "redirect:/";
     }
 
-    @PostMapping("/uploadFiles")
-    public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
-
-        Arrays.asList(files)
-                .stream()
-                .forEach(file -> fileService.uploadFile(file));
-
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded all files!");
-
-        return "redirect:/";
+    @RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+    public String multipleFileUpload(@RequestParam("files") ArrayList<MultipartFile> files,
+                                   RedirectAttributes redirectAttributes) {
+        return fileService.uploadMultipleFiles(files, redirectAttributes);
     }
+
+    @RequestMapping(value = "/getFile/{filename}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+          return fileService.serveFile(filename);
+    }
+
+
 
 }
