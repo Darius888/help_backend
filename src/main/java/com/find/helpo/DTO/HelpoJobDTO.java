@@ -1,6 +1,7 @@
-package com.find.helpo.model;
+package com.find.helpo.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.find.helpo.model.HelpoUser;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -25,16 +26,11 @@ public class HelpoJobDTO {
     private Integer jobOwnerID;
     private String jobFavoredStatus;
 
-
     public void setJobOwnerID(HelpoUser helpoUser) {
         this.jobOwnerID = helpoUser.getHelpoUserID();
     }
     public Integer getJobOwnerID(HelpoUser helpoUser) {
         return helpoUser.getHelpoUserID();
     }
-
-
-
-
 
 }

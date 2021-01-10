@@ -19,8 +19,6 @@ public class ProfilePhoto {
     private Integer profilePhotoID;
     @Column(name = "absolute_path")
     private String absolutePath;
-    @Column(name = "user_type")
-    private String userType;
     @Column(name = "file_name")
     private String fileName;
     @Column(name = "po_helpo_user_id")

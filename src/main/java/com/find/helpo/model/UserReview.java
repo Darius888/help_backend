@@ -18,14 +18,14 @@ public class UserReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_review_id")
     private Integer userReviewID;
-    @Column(name = "user_review_type")
-    private String userReviewType;
     @Column(name = "user_review")
     private String userReview;
-    @Column(name = "review_owner_helpo_user_id")
-    private Integer reviewOwnerHelpoUserID;
+    @Column(name = "review_owner_id")
+    private Integer reviewOwnerID;
+    @Column(name = "review_receiver_id")
+    private Integer reviewReceiverID;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
     private HelpoUser helpoUserReview;
 

@@ -1,12 +1,10 @@
 package com.find.helpo.controller;
 
 import com.find.helpo.model.HelpoJob;
-import com.find.helpo.model.HelpoJobDTO;
+import com.find.helpo.DTO.HelpoJobDTO;
+import com.find.helpo.service.HelpoJobPhotoService;
 import com.find.helpo.service.HelpoJobService;
-import com.find.helpo.service.ProfilePhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,7 +21,7 @@ public class HelpoJobController {
     private HelpoJobService helpoJobService;
 
     @Autowired
-    private ProfilePhotoService fileService;
+    private HelpoJobPhotoService helpoJobPhotoService;
 
     @RequestMapping(value = "/createHelpoJob", method = RequestMethod.POST)
     private String createNewJob(@RequestBody HelpoJobDTO helpoJobDTO)
@@ -51,9 +49,9 @@ public class HelpoJobController {
 
     //TO-DO custom update for all fields
     @RequestMapping(value = "/updateHelpoJobs", method = RequestMethod.PUT)
-    private String updateHelpoJobTitle(@RequestParam String jobTitle)
+    private String updateHelpoJobTitle(@RequestBody HelpoJobDTO helpoJobDTO)
     {
-        return helpoJobService.updateHelpoJobTitle(jobTitle);
+        return helpoJobService.updateHelpoJob(helpoJobDTO);
     }
 
     @RequestMapping(value = "/deleteHelpoJobBy", method = RequestMethod.DELETE)
@@ -65,30 +63,15 @@ public class HelpoJobController {
     @RequestMapping(value = "/deleteHelpoJob", method = RequestMethod.DELETE)
     private String deleteHelpoJob(@RequestBody HelpoJobDTO helpoJobDTO)
     {
-        System.out.println("AAAAAAAA" + helpoJobDTO.getHelpoJobID());
         return helpoJobService.deleteHelpoJob(helpoJobDTO);
     }
 
-
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-
-            return fileService.uploadFile(file,redirectAttributes);
-
-    }
-
-    @RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadHelpoJobPhotos", method = RequestMethod.POST)
     public String multipleFileUpload(@RequestParam("files") ArrayList<MultipartFile> files,
-                                   RedirectAttributes redirectAttributes) {
-        return fileService.uploadMultipleFiles(files, redirectAttributes);
+                                     RedirectAttributes redirectAttributes) {
+        return helpoJobPhotoService.uploadMultipleFiles(files, redirectAttributes);
     }
 
-    @RequestMapping(value = "/getFile/{filename}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-          return fileService.serveFile(filename);
-    }
 
 
 

@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/users")
-public class JwtAuthenticationController {
-
-
+public class UserAuthenticationController {
+    
     private final String HEADER = "Authorization";
 
     @Autowired
@@ -72,7 +71,6 @@ public class JwtAuthenticationController {
             else return "VALID";
 
     }
-
 
     private void authenticate(String username, String password) throws Exception {
         try {

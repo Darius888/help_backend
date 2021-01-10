@@ -41,8 +41,8 @@ public class HelpoUser implements Serializable {
     @OneToMany(mappedBy = "helpoUserReview", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserReview> userReviewList;
 
-    @OneToMany(mappedBy = "helpoUserAverageScore", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AverageScore> averageScoreList;
+    @OneToMany(mappedBy = "helpoUserAverageScore", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AverageScore> averageScoreList = new ArrayList<>();
 
 
 

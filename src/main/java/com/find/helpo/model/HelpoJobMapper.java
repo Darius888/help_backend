@@ -1,5 +1,6 @@
 package com.find.helpo.model;
 
+import com.find.helpo.DTO.HelpoJobDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;

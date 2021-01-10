@@ -20,17 +20,16 @@ CREATE TABLE profile_photo
 (
 profile_photo_id SERIAL PRIMARY KEY NOT NULL,
 absolute_path varchar(100) NOT NULL,
-user_type varchar(100) NOT NULL,
 image_name varchar(100) NOT NULL,
 po_helpo_user_id integer REFERENCES helpo_user(helpo_user_id)
 );
 
 CREATE TABLE average_score
 (
-average_score_id SERIAL PRIMARY KEY NOT NULL,
-user_type varchar(100) NOT NULL,
+score_id SERIAL PRIMARY KEY NOT NULL,
 user_score float NOT NULL,
-average_score_helpo_user_id integer REFERENCES helpo_user(helpo_user_id)
+score_owner_id integer REFERENCES helpo_user(helpo_user_id),
+score_receiver_id integer REFERENCES helpo_user(helpo_user_id)
 );
 
 CREATE TABLE helpo_job
@@ -58,9 +57,9 @@ related_job_id integer REFERENCES helpo_job(helpo_job_id)
 CREATE TABLE user_review
 (
 user_review_id SERIAL PRIMARY KEY NOT NULL,
-user_review_type varchar(100) NOT NULL,
 user_review varchar(500) NOT NULL,
-review_owner_helpo_user_id integer REFERENCES helpo_user(helpo_user_id)
+review_owner_id integer REFERENCES helpo_user(helpo_user_id),
+review_receiver_id integer REFERENCES helpo_user(helpo_user_id)
 );
 
 

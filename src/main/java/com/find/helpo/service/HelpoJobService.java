@@ -2,7 +2,7 @@ package com.find.helpo.service;
 
 
 import com.find.helpo.model.HelpoJob;
-import com.find.helpo.model.HelpoJobDTO;
+import com.find.helpo.DTO.HelpoJobDTO;
 import com.find.helpo.repository.HelpoJobRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +55,15 @@ public class HelpoJobService {
         return helpoJobRepository.findByJobTitle(helpoJobTitle);
     }
 
-    public String updateHelpoJobTitle(String helpoJobTitle) {
-        if (!helpoJobRepository.existsByJobTitle(helpoJobTitle)) {
+    public String updateHelpoJob(HelpoJobDTO helpoJobDTO) {
+        if (!helpoJobRepository.existsByHelpoJobID(helpoJobDTO.getHelpoJobID())) {
             return "Job you are trying to update does not exist";
         } else {
-            HelpoJob helpoJob = helpoJobRepository.findByJobTitle(helpoJobTitle);
-            helpoJob.setJobTitle(helpoJobTitle);
-
+            //Update one field or whole object ?
+            HelpoJob helpoJob = helpoJobRepository.findByHelpoJobID(helpoJobDTO.getHelpoJobID());
+            helpoJob.setJobTitle(helpoJobDTO.getJobTitle());
             helpoJobRepository.save(helpoJob);
+
             return "Job updated successfully";
         }
     }

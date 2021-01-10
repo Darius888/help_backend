@@ -1,13 +1,9 @@
 package com.find.helpo.repository;
 
 import com.find.helpo.model.HelpoJob;
-import com.find.helpo.model.HelpoJobDTO;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 
@@ -19,6 +15,8 @@ public interface HelpoJobRepository extends CrudRepository<HelpoJob, Integer> {
     HelpoJob findByJobTitle(String helpoJobTitle);
 
     List<HelpoJob> findByJobOwnerID(Integer helpoJobOwnerID);
+
+    HelpoJob findByHelpoJobID(Integer helpoJobID);
 
     Integer deleteByHelpoJobID(Integer helpoJobID);
 
