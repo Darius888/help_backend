@@ -11,6 +11,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class ProfilePhotoDTO {
 
+    private Integer profilePhotoID;
     private Integer relatedUserID;
 
     public void setRelatedUserID(HelpoUser helpoUser) {
