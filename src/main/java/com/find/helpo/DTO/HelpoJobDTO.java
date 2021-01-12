@@ -1,12 +1,8 @@
 package com.find.helpo.DTO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.find.helpo.model.HelpoUser;
-import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Column;
-import java.util.Date;
 
 @Getter
 @Setter

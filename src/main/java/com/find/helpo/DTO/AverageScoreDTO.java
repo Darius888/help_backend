@@ -12,7 +12,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class AverageScoreDTO {
 
-    private Integer scoreID;
     private Float userScore;
     private Integer scoreOwnerID;
     private Integer scoreReceiverID;

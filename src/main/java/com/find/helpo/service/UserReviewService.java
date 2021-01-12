@@ -18,7 +18,7 @@ public class UserReviewService {
 
     public String addNewReview(UserReviewDTO userReviewDTO)
     {
-        if(userReviewRepository.existsByReviewReceiverID(userReviewDTO.getUserReviewID()))
+        if(userReviewRepository.existsByReviewReceiverID(userReviewDTO.getReviewReceiverID()))
         {
             return "Such score already exists from this user";
         } else
@@ -45,7 +45,7 @@ public class UserReviewService {
             return "Score you are trying to update, does not exist";
         } else
         {
-            UserReview updatedUserReview = userReviewRepository.findByScoreID(userReview.getUserReviewID());
+            UserReview updatedUserReview = userReviewRepository.findByUserReviewID(userReview.getUserReviewID());
             updatedUserReview.setUserReview(userReview.getUserReview());
             userReviewRepository.save(updatedUserReview);
             return "Updated score saved successfully";

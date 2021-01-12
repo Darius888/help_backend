@@ -11,7 +11,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class UserReviewDTO {
 
-    private Integer userReviewID;
     private String userReview;
     private Integer reviewOwnerID;
     private Integer reviewReceiverID;

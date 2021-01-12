@@ -1,7 +1,6 @@
 package com.find.helpo.config;
 
 import com.find.helpo.service.JwtUserDetailsService;
-//import com.find.helpo.service.JwtHelperDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

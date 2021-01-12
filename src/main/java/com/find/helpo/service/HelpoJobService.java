@@ -1,8 +1,8 @@
 package com.find.helpo.service;
 
 
-import com.find.helpo.model.HelpoJob;
 import com.find.helpo.DTO.HelpoJobDTO;
+import com.find.helpo.model.HelpoJob;
 import com.find.helpo.repository.HelpoJobRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -24,8 +24,8 @@ public class HelpoJobPhoto {
     @Column(name = "related_job_id")
     private Integer relatedJobID;
 
-    @ManyToOne
-    @JoinColumn(name = "helpo_job_id", referencedColumnName = "helpo_job_id", insertable = false, nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "helpo_job_id", referencedColumnName = "helpo_job_id", insertable = false)
     private HelpoJob helpoJobPhotos;
 
 }

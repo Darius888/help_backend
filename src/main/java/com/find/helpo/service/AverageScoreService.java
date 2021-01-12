@@ -2,7 +2,6 @@ package com.find.helpo.service;
 
 import com.find.helpo.DTO.AverageScoreDTO;
 import com.find.helpo.model.AverageScore;
-import com.find.helpo.model.HelpoJob;
 import com.find.helpo.repository.AverageScoreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class AverageScoreService {
 
     public String addNewScore(AverageScoreDTO averageScoreDTO)
     {
-        if(averageScoreRepository.existsByScoreReceiverID(averageScoreDTO.getScoreID()))
+        if(averageScoreRepository.existsByScoreReceiverID(averageScoreDTO.getScoreReceiverID()))
         {
             return "Such score already exists from this user";
         } else

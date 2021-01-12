@@ -39,7 +39,7 @@ public class HelpoJob {
     @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false)
     private HelpoUser helpoUser;
 
-    @OneToMany(mappedBy = "helpoJobPhotos", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "helpoJobPhotos", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HelpoJobPhoto> helpoJobPhotoList;
 
 

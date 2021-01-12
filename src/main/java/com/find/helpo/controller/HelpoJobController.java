@@ -1,7 +1,9 @@
 package com.find.helpo.controller;
 
-import com.find.helpo.model.HelpoJob;
 import com.find.helpo.DTO.HelpoJobDTO;
+import com.find.helpo.DTO.HelpoJobPhotoDTO;
+import com.find.helpo.model.HelpoJob;
+import com.find.helpo.model.HelpoJobPhoto;
 import com.find.helpo.service.HelpoJobPhotoService;
 import com.find.helpo.service.HelpoJobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,8 @@ public class HelpoJobController {
     }
 
     @RequestMapping(value = "/deleteHelpoJobBy", method = RequestMethod.DELETE)
-    private String deleteHelpoJobByJobTitleAndJobOwnerId(@RequestParam String jobTitle, @RequestParam Integer jobOwnerId)
+    private String deleteHelpoJobByJobTitleAndJobOwnerId(@RequestParam String jobTitle,
+                                                         @RequestParam Integer jobOwnerId)
     {
         return helpoJobService.deleteHelpoJobByHelpoJobTitleAndHelpoJobOwnerId(jobTitle, jobOwnerId);
     }
@@ -67,9 +70,10 @@ public class HelpoJobController {
     }
 
     @RequestMapping(value = "/uploadHelpoJobPhotos", method = RequestMethod.POST)
-    public String multipleFileUpload(@RequestParam("files") ArrayList<MultipartFile> files,
+    public String multipleFileUpload(@RequestPart("files") ArrayList<MultipartFile> files,
+                                     @RequestPart("body") ArrayList<HelpoJobPhotoDTO> helpoJobPhotoDTOS,
                                      RedirectAttributes redirectAttributes) {
-        return helpoJobPhotoService.uploadMultipleFiles(files, redirectAttributes);
+        return helpoJobPhotoService.uploadNewHelpoJobPhotos(files, helpoJobPhotoDTOS, redirectAttributes);
     }
 
 

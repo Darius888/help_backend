@@ -19,13 +19,13 @@ public class ProfilePhoto {
     private Integer profilePhotoID;
     @Column(name = "absolute_path")
     private String absolutePath;
-    @Column(name = "file_name")
-    private String fileName;
-    @Column(name = "po_helpo_user_id")
-    private Integer photoOwnerHelpoUserID;
+    @Column(name = "image_name")
+    private String imageName;
+    @Column(name = "related_user_id")
+    private Integer relatedUserID;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false, nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false)
     private HelpoUser helpoUserProfilePhoto;
 
 }
