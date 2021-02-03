@@ -27,8 +27,6 @@ public class HelpoUser implements Serializable {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @Column(name = "username")
-    private String username;
     @Column(name = "password")
     private String password;
 

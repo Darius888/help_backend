@@ -29,11 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    private DisableUrlSessionFilter disableUrlSessionFilter;
+
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth, HttpSecurity httpSecurity) throws Exception {
         // configure AuthenticationManager so that it knows from where to load
         // user for matching credentials
         // Use BCryptPasswordEncoder
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoderHelpSeeker());
+        httpSecurity.addFilterBefore(disableUrlSessionFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -49,9 +53,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable().formLogin().loginPage("/users/authenticate/helpseeker").and().
-                authorizeRequests()
-                .antMatchers("/job/**").authenticated().and().
+        httpSecurity.cors().and().csrf().disable().formLogin().loginPage("/users/authenticate").and().
+            /*    authorizeRequests()
+                .antMatchers("/job/**").authenticated().and().*/
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -62,6 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/users/register/helpseeker", "/users/authenticate/helpseeker");
+        web.ignoring().antMatchers("/users/register", "/users/authenticate", "/job/**");
     }
 }

@@ -26,9 +26,9 @@ public class AverageScoreController {
     }
 
     @RequestMapping(path = "/update", method = RequestMethod.PUT)
-    public String updateExistingRating(AverageScore averageScore)
+    public String updateExistingRating(@RequestBody AverageScoreDTO averageScoreDTO)
     {
-        return averageScoreService.updateExistingScore(averageScore);
+        return averageScoreService.updateExistingScore(averageScoreDTO);
     }
 
     @RequestMapping(path = "/delete", method = RequestMethod.DELETE)

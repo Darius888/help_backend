@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/profile")
 public class HelpoUserProfileController {
@@ -17,12 +22,13 @@ public class HelpoUserProfileController {
     @Autowired
     private ProfilePhotoService fileService;
 
-    @RequestMapping(value = "/uploadProfilePhoto", method = RequestMethod.POST)
-    public String singleFileUpload(@RequestPart("file") MultipartFile file,
-                                   @RequestPart("body") ProfilePhotoDTO profilePhotoDTO,
+    @RequestMapping(value = "/uploadProfilePhoto",
+                    method = RequestMethod.POST,
+                    consumes = {"multipart/form-data"})
+    public String singleFileUpload(@ModelAttribute ProfilePhotoDTO profilePhotoDTO,
                                    RedirectAttributes redirectAttributes) {
 
-        return fileService.uploadNewProfilePhoto(file,profilePhotoDTO,redirectAttributes);
+        return fileService.uploadNewProfilePhoto(profilePhotoDTO,redirectAttributes);
     }
 
     @RequestMapping(value = "/getFile/{filename}", method = RequestMethod.GET)
@@ -30,5 +36,12 @@ public class HelpoUserProfileController {
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         return fileService.serveFile(filename);
     }
+
+    @RequestMapping(value = "/storage/{imagename}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getUrl(@PathVariable String imagename) throws MalformedURLException {
+        return "http://localhost:8080/profile/storage/1.jpeg";
+    }
+
 
 }

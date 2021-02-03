@@ -3,6 +3,7 @@ package com.find.helpo.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Getter
@@ -12,8 +13,10 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "helpo_job", schema = "public")
+@Transactional
 public class HelpoJob {
 
+    //TO-DO correct sequence generation
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "helpo_job_id")
@@ -34,8 +37,10 @@ public class HelpoJob {
     private Integer jobOwnerID;
     @Column(name = "job_favored_status")
     private String jobFavoredStatus;
+    @Column(name = "job_favored_by_user_id")
+    private Integer jobFavoredByUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false)
     private HelpoUser helpoUser;
 

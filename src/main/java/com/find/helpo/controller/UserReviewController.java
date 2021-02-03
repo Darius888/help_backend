@@ -28,9 +28,9 @@ public class UserReviewController {
     }
 
     @RequestMapping(path = "/update", method = RequestMethod.PUT)
-    public String updateExistingReview(UserReview userReview)
+    public String updateExistingReview(@RequestBody UserReviewDTO userReviewDTO)
     {
-        return userReviewService.updateExistingUserReview(userReview);
+        return userReviewService.updateExistingUserReview(userReviewDTO);
     }
 
     @RequestMapping(path = "/delete", method = RequestMethod.DELETE)

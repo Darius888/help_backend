@@ -12,7 +12,6 @@ helpo_user_id SERIAL PRIMARY KEY NOT NULL,
 first_name varchar(100) NOT NULL,
 last_name varchar(100) NOT NULL,
 email varchar(100) NOT NULL,
-username varchar(100) NOT NULL,
 password varchar(200) NOT NULL
 );
 
@@ -42,7 +41,8 @@ job_description varchar(500) NOT NULL,
 job_reward varchar(200) NOT NULL,
 job_status varchar(100) NOT NULL,
 job_owner_id integer REFERENCES helpo_user(helpo_user_id) NOT NULL,
-job_favored_status varchar(100)
+job_favored_status varchar(100),
+job_favored_by_user_id integer REFERENCES helpo_user(helpo_user_id)
 );
 
 CREATE TABLE job_photo

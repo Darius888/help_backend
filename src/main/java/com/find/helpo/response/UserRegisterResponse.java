@@ -1,4 +1,4 @@
-package com.find.helpo.model;
+package com.find.helpo.response;
 
 import lombok.*;
 
@@ -10,6 +10,5 @@ import lombok.*;
 public class UserRegisterResponse {
 
     private String response;
-    private String userEmail;
 
 }

@@ -110,6 +110,10 @@
 			<version>1.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+		</dependency>
 
 	</dependencies>
 

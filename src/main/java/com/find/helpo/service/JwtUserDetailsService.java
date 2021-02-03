@@ -1,7 +1,10 @@
 package com.find.helpo.service;
 
+import com.find.helpo.DTO.HelpoUserDTO;
+import com.find.helpo.model.HelpoJob;
 import com.find.helpo.model.HelpoUser;
 import com.find.helpo.repository.HelpoUserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,23 +34,23 @@ public class JwtUserDetailsService implements UserDetailsService {
                 new ArrayList<>());
     }
 
-    public String saveHelpSeeker(HelpoUser helpoUser) {
+    public String saveHelpSeeker(HelpoUserDTO helpoUserDTO) {
 
-        HelpoUser newHelpoUser = new HelpoUser();
+        ModelMapper modelMapper = new ModelMapper();
+        HelpoUser newHelpoUser = modelMapper.map(helpoUserDTO, HelpoUser.class);
         String response = "";
-        if(!(checkIfHelpSeekerExists(helpoUser.getEmail())))
+        if(!(checkIfHelpSeekerExists(helpoUserDTO.getEmail())))
         {
-            newHelpoUser.setEmail(helpoUser.getEmail());
-            newHelpoUser.setPassword(bcryptEncoder.encode(helpoUser.getPassword()));
-            newHelpoUser.setFirstName(helpoUser.getFirstName());
-            newHelpoUser.setLastName(helpoUser.getLastName());
-            newHelpoUser.setUsername(helpoUser.getUsername());
+            newHelpoUser.setEmail(helpoUserDTO.getEmail());
+            newHelpoUser.setPassword(bcryptEncoder.encode(helpoUserDTO.getPassword()));
+            newHelpoUser.setFirstName(helpoUserDTO.getFirstName());
+            newHelpoUser.setLastName(helpoUserDTO.getLastName());
             helpoUserRepository.save(newHelpoUser);
 
-            response = "Help seeker registered successfully";
+            response = "User registered successfully";
         } else
         {
-            response = "Help seeker with such email already exists";
+            response = "User with such email already exists";
         }
 
         return response;

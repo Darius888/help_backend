@@ -1,6 +1,7 @@
 package com.find.helpo.model;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 

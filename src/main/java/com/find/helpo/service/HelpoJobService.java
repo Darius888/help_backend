@@ -34,6 +34,7 @@ public class HelpoJobService {
         {
             ModelMapper modelMapper = new ModelMapper();
             HelpoJob helpoJob = modelMapper.map(helpoJobDTO, HelpoJob.class);
+            System.out.println("AHA");
             helpoJobRepository.save(helpoJob);
 
             return "Job created successfully";
@@ -59,9 +60,15 @@ public class HelpoJobService {
         if (!helpoJobRepository.existsByHelpoJobID(helpoJobDTO.getHelpoJobID())) {
             return "Job you are trying to update does not exist";
         } else {
-            //Update one field or whole object ?
             HelpoJob helpoJob = helpoJobRepository.findByHelpoJobID(helpoJobDTO.getHelpoJobID());
             helpoJob.setJobTitle(helpoJobDTO.getJobTitle());
+            helpoJob.setJobPostDate(helpoJobDTO.getJobPostDate());
+            helpoJob.setJobType(helpoJobDTO.getJobType());
+            helpoJob.setJobDescription(helpoJobDTO.getJobDescription());
+            helpoJob.setJobReward(helpoJobDTO.getJobReward());
+            helpoJob.setJobStatus(helpoJobDTO.getJobStatus());
+            helpoJob.setJobOwnerID(helpoJobDTO.getJobOwnerID());
+            helpoJob.setJobFavoredStatus(helpoJobDTO.getJobFavoredStatus());
             helpoJobRepository.save(helpoJob);
 
             return "Job updated successfully";
@@ -75,7 +82,6 @@ public class HelpoJobService {
             return "Job you are trying to delete does not exist";
         } else
         {
-            System.out.println("VA CIA VIA" + helpoJobDTO.getHelpoJobID());
             helpoJobRepository.deleteByHelpoJobID(helpoJobDTO.getHelpoJobID());
             return "Job deleted successfully";
         }

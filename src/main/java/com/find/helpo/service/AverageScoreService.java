@@ -43,15 +43,15 @@ public class AverageScoreService {
         }
     }
 
-    public String updateExistingScore(AverageScore averageScore)
+    public String updateExistingScore(AverageScoreDTO averageScoreDTO)
     {
-        if(!averageScoreRepository.existsByScoreReceiverID(averageScore.getScoreID()))
+        if(!averageScoreRepository.existsByScoreReceiverID(averageScoreDTO.getScoreID()))
         {
             return "Score you are trying to update, does not exist";
         } else
         {
-            AverageScore updatedAverageScore = averageScoreRepository.findByScoreID(averageScore.getScoreID());
-            updatedAverageScore.setUserScore(averageScore.getUserScore());
+            AverageScore updatedAverageScore = averageScoreRepository.findByScoreID(averageScoreDTO.getScoreID());
+            updatedAverageScore.setUserScore(averageScoreDTO.getUserScore());
             averageScoreRepository.save(updatedAverageScore);
             return "Updated score saved successfully";
         }

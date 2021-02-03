@@ -15,7 +15,7 @@ public class ProfilePhotoService extends FileService {
     @Autowired
     private ProfilePhotoRepository profilePhotoRepository;
 
-    public String uploadNewProfilePhoto(MultipartFile file, ProfilePhotoDTO profilePhotoDTO, RedirectAttributes redirectAttributes)
+    public String uploadNewProfilePhoto(ProfilePhotoDTO profilePhotoDTO, RedirectAttributes redirectAttributes)
     {
         if(profilePhotoRepository.existsByRelatedUserID(profilePhotoDTO.getRelatedUserID()))
         {
@@ -24,10 +24,10 @@ public class ProfilePhotoService extends FileService {
         {
             ModelMapper modelMapper = new ModelMapper();
             ProfilePhoto profilePhoto = modelMapper.map(profilePhotoDTO, ProfilePhoto.class);
-            profilePhoto.setAbsolutePath("/storage" + file.getOriginalFilename());
-            profilePhoto.setImageName(file.getOriginalFilename());
+            profilePhoto.setAbsolutePath("/storage" + profilePhotoDTO.getProfilePhoto().getOriginalFilename());
+            profilePhoto.setImageName(profilePhotoDTO.getProfilePhoto().getOriginalFilename());
             profilePhotoRepository.save(profilePhoto);
-            uploadFile(file, redirectAttributes);
+            uploadFile(profilePhotoDTO.getProfilePhoto(), redirectAttributes);
             return "File uploaded successfully";
         }
     }

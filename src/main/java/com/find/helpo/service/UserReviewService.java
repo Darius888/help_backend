@@ -38,15 +38,15 @@ public class UserReviewService {
         }
     }
 
-    public String updateExistingUserReview(UserReview userReview)
+    public String updateExistingUserReview(UserReviewDTO userReviewDTO)
     {
-        if(!userReviewRepository.existsByReviewReceiverID(userReview.getUserReviewID()))
+        if(!userReviewRepository.existsByReviewReceiverID(userReviewDTO.getUserReviewID()))
         {
             return "Score you are trying to update, does not exist";
         } else
         {
-            UserReview updatedUserReview = userReviewRepository.findByUserReviewID(userReview.getUserReviewID());
-            updatedUserReview.setUserReview(userReview.getUserReview());
+            UserReview updatedUserReview = userReviewRepository.findByUserReviewID(userReviewDTO.getUserReviewID());
+            updatedUserReview.setUserReview(userReviewDTO.getUserReview());
             userReviewRepository.save(updatedUserReview);
             return "Updated score saved successfully";
         }
