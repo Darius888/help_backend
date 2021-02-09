@@ -1,11 +1,16 @@
 package com.find.helpo.service;
 
 import com.find.helpo.DTO.HelpoJobPhotoDTO;
+import com.find.helpo.model.HelpoJob;
 import com.find.helpo.model.HelpoJobPhoto;
+import com.find.helpo.model.HelpoUser;
 import com.find.helpo.repository.HelpoJobPhotoRepository;
+import com.find.helpo.repository.HelpoJobRepository;
+import com.find.helpo.repository.HelpoUserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -16,18 +21,29 @@ public class HelpoJobPhotoService extends FileService {
     @Autowired
     private HelpoJobPhotoRepository helpoJobPhotoRepository;
 
-    public String uploadNewHelpoJobPhotos(ArrayList<HelpoJobPhotoDTO> helpoJobPhotoDTOS, RedirectAttributes redirectAttributes)
+    @Autowired
+    private HelpoJobRepository helpoJobRepository;
+
+    @Autowired
+    private HelpoUserRepository helpoUserRepository;
+
+    public String uploadNewHelpoJobPhotos(MultipartFile[] files, String email, RedirectAttributes redirectAttributes)
     {
-        ModelMapper modelMapper = new ModelMapper();
-        Integer countOfJobPhotos = helpoJobPhotoRepository.countByRelatedJobID(helpoJobPhotoDTOS.get(0).getRelatedJobID());
-        int countOfJobPhotosWithSentPhotos = countOfJobPhotos + helpoJobPhotoDTOS.size();
+        System.out.println("AAAA" + helpoUserRepository.findByEmail(email).toString());
+
+        HelpoUser user = helpoUserRepository.findByEmail(email);
+
+//        HelpoJob helpoJob = HelpoJobRepository.f
+
+        Integer countOfJobPhotos = helpoJobPhotoRepository.countByRelatedJobID(1);
+        int countOfJobPhotosWithSentPhotos = countOfJobPhotos + files.length;
 
         if(countOfJobPhotos == 7)
         {
             return "User already has already uploaded 7 images, which is the maximum amount";
         }
 
-        if(helpoJobPhotoDTOS.size() > 7)
+        if(files.length > 7)
         {
             return "User is trying to upload more than 7 helpo job photos which is the maximum amount";
         }
@@ -37,19 +53,17 @@ public class HelpoJobPhotoService extends FileService {
             return "User already has some images uploaded and with the ones currently being added it adds up to amount which is bigger then 7";
         }
 
-        for(int i=0; i<helpoJobPhotoDTOS.size(); i++)
-        {
-            if(helpoJobPhotoRepository.existsByRelatedJobID(helpoJobPhotoDTOS.get(i).getRelatedJobID()) && helpoJobPhotoRepository.existsByImageName(helpoJobPhotoDTOS.get(i).getJobPhoto().getOriginalFilename()))
-            {
-               return  "Helpo job photo with title " + helpoJobPhotoDTOS.get(i).getJobPhoto().getOriginalFilename() + " already exists for this user";
-            } else
-            {
-                HelpoJobPhoto helpoJobPhoto = modelMapper.map(helpoJobPhotoDTOS.get(i), HelpoJobPhoto.class);
-                helpoJobPhoto.setAbsolutePath("/storage/" + helpoJobPhotoDTOS.get(i).getJobPhoto().getOriginalFilename());
-                helpoJobPhoto.setImageName(helpoJobPhotoDTOS.get(i).getJobPhoto().getOriginalFilename());
+        for (MultipartFile file : files) {
+            if (helpoJobPhotoRepository.existsByRelatedJobID(user.getHelpoUserID()) && helpoJobPhotoRepository.existsByImageName(file.getOriginalFilename())) {
+                return "Helpo job photo with title " + file.getOriginalFilename() + " already exists for this user";
+            } else {
+                HelpoJobPhoto helpoJobPhoto = new HelpoJobPhoto();
+                helpoJobPhoto.setAbsolutePath("/storage/" + file.getOriginalFilename());
+                helpoJobPhoto.setImageName(file.getOriginalFilename());
+                helpoJobPhoto.setRelatedJobID(user.getHelpoUserID());
                 System.out.println("ABC" + helpoJobPhoto.toString());
                 helpoJobPhotoRepository.save(helpoJobPhoto);
-                uploadFile(helpoJobPhotoDTOS.get(i).getJobPhoto(), redirectAttributes);
+                uploadFile(file, redirectAttributes);
             }
         }
         return "Files uploaded successfully";

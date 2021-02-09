@@ -41,7 +41,7 @@ public class HelpoJob {
     private Integer jobFavoredByUserId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id", insertable = false)
+    @JoinColumn(name = "helpo_user_id", referencedColumnName = "helpo_user_id")
     private HelpoUser helpoUser;
 
     @OneToMany(mappedBy = "helpoJobPhotos", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

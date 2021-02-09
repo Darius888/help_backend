@@ -4,11 +4,15 @@ package com.find.helpo.service;
 import com.find.helpo.DTO.HelpoJobDTO;
 import com.find.helpo.model.HelpoJob;
 import com.find.helpo.repository.HelpoJobRepository;
+import com.find.helpo.repository.HelpoUserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import java.util.List;
 
 
@@ -19,7 +23,13 @@ public class HelpoJobService {
     @Autowired
     private HelpoJobRepository helpoJobRepository;
 
-    public String createNewJob(HelpoJobDTO helpoJobDTO)
+    @Autowired
+    private HelpoUserRepository helpoUserRepository;
+
+    @Autowired
+    private HelpoJobPhotoService helpoJobPhotoService;
+
+    public String createNewJob(MultipartFile[] jobPhotos, HelpoJobDTO helpoJobDTO, String userEmail, RedirectAttributes redirectAttributes)
     {
         if(helpoJobRepository.existsByJobTitleAndJobDescription(helpoJobDTO.getJobTitle(),helpoJobDTO.getJobDescription()))
         {
@@ -32,10 +42,13 @@ public class HelpoJobService {
             return "Job with such job description already exists";
         } else
         {
+
             ModelMapper modelMapper = new ModelMapper();
             HelpoJob helpoJob = modelMapper.map(helpoJobDTO, HelpoJob.class);
-            System.out.println("AHA");
+            helpoJob.setJobOwnerID(helpoUserRepository.findByEmail(userEmail).getHelpoUserID());
             helpoJobRepository.save(helpoJob);
+            helpoJobPhotoService.uploadNewHelpoJobPhotos(jobPhotos, userEmail, redirectAttributes);
+
 
             return "Job created successfully";
         }

@@ -7,6 +7,7 @@ import com.find.helpo.model.*;
 import com.find.helpo.repository.HelpoUserRepository;
 import com.find.helpo.response.UserEmailValidityResponse;
 import com.find.helpo.response.UserLoginResponse;
+import com.find.helpo.response.UserLogoutResponse;
 import com.find.helpo.response.UserRegisterResponse;
 import com.find.helpo.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +51,8 @@ public class UserAuthenticationController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         final UserLoginResponse userLoginResponse = new UserLoginResponse();
-        Cookie[] cookiez = request.getCookies();
-        Cookie cook;
-        for(int i=0; i<cookiez.length; i++)
-        {
-            cook=cookiez[i];
-            System.out.println("AAA " + cook.getValue());
-            System.out.println("AAA " + cook.getName());
-        }
+
+//
         System.out.println(Arrays.toString(request.getCookies()));
         if (helpoUserDetailsService.checkIfHelpSeekerExists(helpoUserAuthenticationRequest.getUserEmail())) {
 
@@ -66,6 +61,8 @@ public class UserAuthenticationController {
             Cookie cookie = new Cookie("token", token);
             cookie.setSecure(false);
             cookie.setHttpOnly(false);
+            cookie.setPath("/users");
+            cookie.setMaxAge(1000000);
 //            cookie.setDomain("/");
 //            res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -98,6 +95,36 @@ public class UserAuthenticationController {
         return ResponseEntity.ok(userEmailValidityResponse);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity<UserLogoutResponse> logoutUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //TO-DO ADD NULL CHECK FO COOKIES
+        UserLogoutResponse userLogoutResponse = new UserLogoutResponse();
+        Cookie[] cookiez = request.getCookies();
+        Cookie cookz;
+        for (Cookie value : cookiez) {
+            cookz = value;
+            System.out.println(cookz.getValue());
+        }
+        Cookie[] cookiezz = request.getCookies();
+        Cookie cook;
+        for (Cookie cookie : cookiezz) {
+            if(cookie.getName().equals("token"))
+            {
+                Cookie logoutCookie = new Cookie("token", null);
+                logoutCookie.setPath("/users");
+                logoutCookie.setHttpOnly(true);
+                logoutCookie.setMaxAge(0);
+                response.addCookie(logoutCookie);
+                userLogoutResponse.setResponse("Logout successfull");
+            }
+        }
+
+        return ResponseEntity.ok().body(userLogoutResponse);
+    }
+
+
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<UserRegisterResponse> saveHelpSeeker(@RequestBody HelpoUserDTO helpoUserDTO) throws Exception {
@@ -108,11 +135,21 @@ public class UserAuthenticationController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/validate", method = RequestMethod.POST)
-    public String validateToken(@RequestBody JwtValidationModel jwtValidationModel) throws Exception {
-        if (!(jwtTokenUtil.validateToken(jwtValidationModel.getToken(),jwtValidationModel.getUserEmail())))
-            return "INVALID";
-            else return "VALID";
+    @RequestMapping(value = "/validate", method = RequestMethod.GET)
+    public Boolean validateToken(HttpServletResponse res, HttpServletRequest request) throws Exception {
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies.length !=0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    if ((jwtTokenUtil.validateToken(cookie.getValue(), jwtTokenUtil.getUserEmailFromToken(cookie.getValue()))))
+                        return true;
+
+                }
+            }
+        }
+
+        return false;
     }
 
     private void authenticate(String username, String password) throws Exception {

@@ -1,4 +1,4 @@
-package com.find.helpo.model;
+package com.find.helpo.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class JwtValidationModel {
+public class UserLogoutResponse {
 
     private String response;
 

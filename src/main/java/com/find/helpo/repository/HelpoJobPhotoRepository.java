@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HelpoJobPhotoRepository extends CrudRepository<HelpoJobPhoto, Integer> {
+public interface                                                                                                                                              HelpoJobPhotoRepository extends CrudRepository<HelpoJobPhoto, Integer> {
 
       Integer countByRelatedJobID(Integer relatedJobID);
 
