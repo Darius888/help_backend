@@ -27,7 +27,7 @@ public class ProfilePhotoService extends FileService {
             profilePhoto.setAbsolutePath("/storage" + profilePhotoDTO.getProfilePhoto().getOriginalFilename());
             profilePhoto.setImageName(profilePhotoDTO.getProfilePhoto().getOriginalFilename());
             profilePhotoRepository.save(profilePhoto);
-            uploadFile(profilePhotoDTO.getProfilePhoto(), redirectAttributes);
+//            uploadFile(profilePhotoDTO.getProfilePhoto(), redirectAttributes);
             return "File uploaded successfully";
         }
     }

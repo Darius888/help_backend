@@ -3,6 +3,10 @@ package com.find.helpo.service;
 
 import com.find.helpo.DTO.HelpoJobDTO;
 import com.find.helpo.model.HelpoJob;
+import com.find.helpo.model.HelpoJobGet;
+import com.find.helpo.model.HelpoJobPhoto;
+import com.find.helpo.model.HelpoUser;
+import com.find.helpo.repository.HelpoJobPhotoRepository;
 import com.find.helpo.repository.HelpoJobRepository;
 import com.find.helpo.repository.HelpoUserRepository;
 import org.modelmapper.ModelMapper;
@@ -12,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,6 +32,9 @@ public class HelpoJobService {
 
     @Autowired
     private HelpoJobPhotoService helpoJobPhotoService;
+
+    @Autowired
+    private HelpoJobPhotoRepository helpoJobPhotoRepository;
 
     public String createNewJob(MultipartFile[] jobPhotos, HelpoJobDTO helpoJobDTO, String userEmail, RedirectAttributes redirectAttributes)
     {
@@ -45,18 +52,68 @@ public class HelpoJobService {
 
             ModelMapper modelMapper = new ModelMapper();
             HelpoJob helpoJob = modelMapper.map(helpoJobDTO, HelpoJob.class);
+
             helpoJob.setJobOwnerID(helpoUserRepository.findByEmail(userEmail).getHelpoUserID());
+            helpoJob.setJobFavoredStatus("false");
+            helpoJob.setJobFavoredByUserId(null);
+
             helpoJobRepository.save(helpoJob);
-            helpoJobPhotoService.uploadNewHelpoJobPhotos(jobPhotos, userEmail, redirectAttributes);
+
+            //ADD TO IMAGE NAME EITHER ITS JOB PHOTO
+            helpoJobPhotoService.uploadNewHelpoJobPhotos(jobPhotos, userEmail, helpoJob.getHelpoJobID(), redirectAttributes);
 
 
             return "Job created successfully";
         }
     }
 
-    public List<HelpoJob> getAllHelpoJobs()
+    public List<HelpoJobGet> getAllHelpoJobs()
     {
-        return helpoJobRepository.findAll();
+        String imagePath = "http://localhost:8080/storage/";
+
+        List<HelpoJobGet> helpoJobGets = new ArrayList<>();
+
+        List<HelpoJob> helpoJobs = helpoJobRepository.findAll();
+
+
+        for(HelpoJob helpoJob: helpoJobs)
+        {
+            HelpoJobGet helpoJobGet = new HelpoJobGet();
+
+
+            helpoJobGet.setJobTitle(helpoJob.getJobTitle());
+            helpoJobGet.setJobPostDate(helpoJob.getJobPostDate());
+            helpoJobGet.setJobType(helpoJob.getJobType());
+            helpoJobGet.setJobDescription(helpoJob.getJobDescription());
+            helpoJobGet.setJobReward(helpoJob.getJobReward());
+            helpoJobGet.setJobStatus(helpoJob.getJobStatus());
+            helpoJobGet.setJobFavoredStatus(helpoJob.getJobFavoredStatus());
+
+            HelpoUser helpoUser = helpoUserRepository.findByHelpoUserID(helpoJob.getJobOwnerID());
+
+            helpoJobGet.setJobOwnerFirstName(helpoUser.getFirstName());
+            helpoJobGet.setJobOwnerLastName(helpoUser.getLastName());
+
+            List<HelpoJobPhoto> relatedHelpoJobPhotos = helpoJobPhotoRepository.findAllByRelatedJobID(helpoJob.getHelpoJobID());
+
+            ArrayList<String> helpoJobPhotoPaths = new ArrayList<>();
+
+            System.out.println(relatedHelpoJobPhotos.toString());
+
+            for(HelpoJobPhoto helpoJobPhoto: relatedHelpoJobPhotos)
+            {
+                helpoJobPhotoPaths.add(imagePath + helpoJobPhoto.getImageName());
+            }
+
+            helpoJobGet.setJobPhotoList(helpoJobPhotoPaths);
+
+            helpoJobGets.add(helpoJobGet);
+
+
+        }
+
+
+        return helpoJobGets;
     }
 
     public List<HelpoJob> getHelpoJobsByOwnerID(Integer jobOwnerID)
@@ -80,8 +137,8 @@ public class HelpoJobService {
             helpoJob.setJobDescription(helpoJobDTO.getJobDescription());
             helpoJob.setJobReward(helpoJobDTO.getJobReward());
             helpoJob.setJobStatus(helpoJobDTO.getJobStatus());
-            helpoJob.setJobOwnerID(helpoJobDTO.getJobOwnerID());
-            helpoJob.setJobFavoredStatus(helpoJobDTO.getJobFavoredStatus());
+            helpoJob.setJobOwnerID(1);
+//            helpoJob.setJobFavoredStatus(helpoJobDTO.getJobFavoredStatus());
             helpoJobRepository.save(helpoJob);
 
             return "Job updated successfully";

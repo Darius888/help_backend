@@ -19,7 +19,7 @@ public class FileService {
 
     private static final String UPLOADED_FOLDER = "/home/darius/Idejos/Helpo/Backend/helpo/storage/";
 
-    public String uploadFile(MultipartFile file, RedirectAttributes redirectAttributes)
+    public String uploadFile(MultipartFile file, String newHelpoJobPhotoName, RedirectAttributes redirectAttributes)
     {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
@@ -28,7 +28,7 @@ public class FileService {
         try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Path path = Paths.get(UPLOADED_FOLDER + newHelpoJobPhotoName);
             Files.write(path, bytes);
 
             redirectAttributes.addFlashAttribute("message",

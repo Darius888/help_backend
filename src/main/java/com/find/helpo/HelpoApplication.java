@@ -1,14 +1,21 @@
 package com.find.helpo;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
+//import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+//import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+//import io.swagger.v3.oas.annotations.info.Info;
+//import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.unit.DataSize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+
+import javax.servlet.MultipartConfigElement;
 
 
 @SpringBootApplication
@@ -20,33 +27,22 @@ public class HelpoApplication {
 
 	//TO-DO Configure to access images from different folder
 
-//	@Configuration
-//	public class StaticResourceConfiguration implements WebMvcConfigurer {
-//
-//		private final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-//				"classpath:/META-INF/resources/", "classpath:/resources/",
-//				"classpath:/static/", "classpath:/public/", "classpath:/storage/"};
-//
-//		@Override
-//		public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//			registry.addResourceHandler("/**")
-//					.addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
-//		}
-//	}
 
-	@Configuration
-	@OpenAPIDefinition(info = @Info(title = "My API", version = "v1"))
-	@SecurityScheme(
-			name = "bearerAuth",
-			type = SecuritySchemeType.HTTP,
-			bearerFormat = "JWT",
-			scheme = "bearer"
-	)
-	public class OpenApi30Config {
+	//TO-DO SWTICH TO AWS S3 SERVICES FOR IMAGE STORAGE
 
-
+@Configuration
+@EnableWebMvc
+public class MvcConfig implements WebMvcConfigurer {
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+				.addResourceHandler("/storage/**")
+				.addResourceLocations("file:/home/darius/Idejos/Helpo/Backend/helpo/storage/")
+				.setCachePeriod(3600)
+				.resourceChain(true)
+				.addResolver(new PathResourceResolver());
 	}
-
+}
 	@Bean
 	public WebMvcConfigurer cors() {
 		return new WebMvcConfigurer() {
@@ -58,6 +54,15 @@ public class HelpoApplication {
 						.allowedHeaders("*");
 			}
 		};
+	}
+	@Bean
+	public CommonsRequestLoggingFilter requestLoggingFilter() {
+		CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+		loggingFilter.setIncludeClientInfo(true);
+		loggingFilter.setIncludeQueryString(true);
+		loggingFilter.setIncludePayload(true);
+		loggingFilter.setMaxPayloadLength(64000);
+		return loggingFilter;
 	}
 }
 

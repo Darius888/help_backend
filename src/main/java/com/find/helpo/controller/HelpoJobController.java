@@ -4,19 +4,22 @@ import com.find.helpo.DTO.HelpoJobDTO;
 import com.find.helpo.DTO.HelpoJobPhotoDTO;
 import com.find.helpo.config.JwtTokenUtil;
 import com.find.helpo.model.HelpoJob;
+import com.find.helpo.model.HelpoJobGet;
 import com.find.helpo.model.HelpoJobPhoto;
+import com.find.helpo.service.CookieValidationService;
 import com.find.helpo.service.HelpoJobPhotoService;
 import com.find.helpo.service.HelpoJobService;
 
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotBlank;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,24 +36,23 @@ public class HelpoJobController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private CookieValidationService cookieValidationService;
 
-    @RequestMapping(value = "/createHelpoJob", method = RequestMethod.POST, consumes = {"application/octet-stream", "multipart/form-data"})
-    private String createNewJob(@RequestPart("jobPhotos") MultipartFile[] jobPhotos, @NotNull @NotBlank @RequestPart("helpoJobDTO") HelpoJobDTO helpoJobDTO, HttpServletRequest request, RedirectAttributes redirectAttributes)
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping(value = "/createHelpoJob")
+    private String createNewJob(@RequestPart("helpoJobPhotos") MultipartFile[] helpoJobPhotos,@RequestPart("helpoJobDTO") HelpoJobDTO helpoJobDTO, RedirectAttributes redirectAttributes, HttpServletRequest request)
     {
-        Cookie[] cookies = request.getCookies();
-        if(cookies.length !=0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    if ((jwtTokenUtil.validateToken(cookie.getValue(), jwtTokenUtil.getUserEmailFromToken(cookie.getValue()))))
-                        return helpoJobService.createNewJob(jobPhotos, helpoJobDTO, jwtTokenUtil.getUserEmailFromToken(cookie.getValue()), redirectAttributes);
-                }
-            }
-        }
-        return "Failed to create new job";
+
+       if(cookieValidationService.validateCookieToken(request.getCookies()))
+       {
+           return helpoJobService.createNewJob(helpoJobPhotos, helpoJobDTO, jwtTokenUtil.getUserEmailFromToken(cookieValidationService.getCookieWithTokenValue(request.getCookies()).getValue()), redirectAttributes);
+       }
+           return "Issue with validation";
     }
 
     @RequestMapping(value = "/getAllHelpoJobs", method = RequestMethod.GET)
-    private List<HelpoJob> getAllHelpoJobS()
+    private List<HelpoJobGet> getAllHelpoJob()
     {
         return helpoJobService.getAllHelpoJobs();
     }
@@ -86,12 +88,4 @@ public class HelpoJobController {
     {
         return helpoJobService.deleteHelpoJob(helpoJobDTO);
     }
-
-//    @RequestMapping(value = "/uploadHelpoJobPhotos",
-//                    method = RequestMethod.POST,
-//                    consumes = {"multipart/form-data"})
-//    public String multipleFileUpload(@RequestPart("files") MultipartFile[] files, HttpServletRequest request,
-//                                     RedirectAttributes redirectAttributes) {
-//        return helpoJobPhotoService.uploadNewHelpoJobPhotos(files, email, redirectAttributes);
-//    }
 }

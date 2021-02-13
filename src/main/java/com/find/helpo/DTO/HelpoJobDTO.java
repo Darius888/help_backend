@@ -19,22 +19,22 @@ public class HelpoJobDTO {
     private String jobDescription;
     private String jobReward;
     private String jobStatus;
-    private Integer jobOwnerID;
-    private String jobFavoredStatus;
-    private Integer jobFavoredByUserId;
-
-    public void setJobOwnerID(HelpoUser helpoUser) {
-        this.jobOwnerID = helpoUser.getHelpoUserID();
-    }
-    public Integer getJobOwnerID(HelpoUser helpoUser) {
-        return helpoUser.getHelpoUserID();
-    }
-
-    public void setJobFavoredByUserId(HelpoUser helpoUser) {
-        this.jobFavoredByUserId = helpoUser.getHelpoUserID();
-    }
-    public Integer getJobFavoredByUserId(HelpoUser helpoUser) {
-        return helpoUser.getHelpoUserID();
-    }
+//    private Integer jobOwnerID;
+//    private String jobFavoredStatus;
+//    private Integer jobFavoredByUserId;
+//
+//    public void setJobOwnerID(HelpoUser helpoUser) {
+//        this.jobOwnerID = helpoUser.getHelpoUserID();
+//    }
+//    public Integer getJobOwnerID(HelpoUser helpoUser) {
+//        return helpoUser.getHelpoUserID();
+//    }
+//
+//    public void setJobFavoredByUserId(HelpoUser helpoUser) {
+//        this.jobFavoredByUserId = helpoUser.getHelpoUserID();
+//    }
+//    public Integer getJobFavoredByUserId(HelpoUser helpoUser) {
+//        return helpoUser.getHelpoUserID();
+//    }
 
 }

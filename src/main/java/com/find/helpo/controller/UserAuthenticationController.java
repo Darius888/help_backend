@@ -62,7 +62,7 @@ public class UserAuthenticationController {
             cookie.setSecure(false);
             cookie.setHttpOnly(false);
             cookie.setPath("/users");
-            cookie.setMaxAge(1000000);
+//            cookie.setMaxAge(1000000);
 //            cookie.setDomain("/");
 //            res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Credentials", "true");

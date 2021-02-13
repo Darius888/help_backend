@@ -27,13 +27,11 @@ public class HelpoJobPhotoService extends FileService {
     @Autowired
     private HelpoUserRepository helpoUserRepository;
 
-    public String uploadNewHelpoJobPhotos(MultipartFile[] files, String email, RedirectAttributes redirectAttributes)
+    public String uploadNewHelpoJobPhotos(MultipartFile[] files, String email, Integer helpoJobID, RedirectAttributes redirectAttributes)
     {
         System.out.println("AAAA" + helpoUserRepository.findByEmail(email).toString());
 
         HelpoUser user = helpoUserRepository.findByEmail(email);
-
-//        HelpoJob helpoJob = HelpoJobRepository.f
 
         Integer countOfJobPhotos = helpoJobPhotoRepository.countByRelatedJobID(1);
         int countOfJobPhotosWithSentPhotos = countOfJobPhotos + files.length;
@@ -58,12 +56,11 @@ public class HelpoJobPhotoService extends FileService {
                 return "Helpo job photo with title " + file.getOriginalFilename() + " already exists for this user";
             } else {
                 HelpoJobPhoto helpoJobPhoto = new HelpoJobPhoto();
-                helpoJobPhoto.setAbsolutePath("/storage/" + file.getOriginalFilename());
-                helpoJobPhoto.setImageName(file.getOriginalFilename());
-                helpoJobPhoto.setRelatedJobID(user.getHelpoUserID());
-                System.out.println("ABC" + helpoJobPhoto.toString());
+                helpoJobPhoto.setAbsolutePath("/storage/" + helpoJobID + "-" + user.getHelpoUserID() + file.getOriginalFilename());
+                helpoJobPhoto.setImageName(helpoJobID + "-" + user.getHelpoUserID() + "-" + "helpoJob" + "-" + file.getOriginalFilename());
+                helpoJobPhoto.setRelatedJobID(helpoJobID);
                 helpoJobPhotoRepository.save(helpoJobPhoto);
-                uploadFile(file, redirectAttributes);
+                uploadFile(file, helpoJobPhoto.getImageName(), redirectAttributes);
             }
         }
         return "Files uploaded successfully";
